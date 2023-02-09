@@ -31,6 +31,8 @@ public class Main {
 		
 		chrome.getDriver().manage().window().maximize();
 		
+		
+		System.out.println(ip);
 		chrome.getDriver().get(ip);
 
 		we = findElement("details-button");
@@ -59,9 +61,9 @@ public class Main {
 
 		chrome.getDriver().manage().window().fullscreen();
 		
-		we = findElement("button-1222-btnIconEl");
+		we = findElementByClass("preview_fullScreen");
 		
-		sleep(1000);
+		sleep(3000);
 		
 		we.click();
 		
@@ -136,6 +138,24 @@ public class Main {
 		
 	}
 	
+	private static WebElement findElementByClass (String element) {
+		
+		WebElement we = null;
+		
+		if(elementExistClass(element, 15)) {
+			
+			we = chrome.getDriver().findElement(By.className(element));
+			
+		} else {
+			
+			we = null;
+			
+		}
+		
+		return we;
+		
+	}
+		
 	private static List <WebElement> findElementsByPath (String element) {
 		
 		List <WebElement> we = null;
@@ -280,6 +300,58 @@ public class Main {
 			try {
 				
 				chrome.getDriver().findElements(By.xpath(element));
+				
+				exist = true;
+				
+				run = false;
+				
+				//System.out.println("1");
+				
+			} catch (NoSuchElementException e) {
+				
+				i++;
+				
+				sleep(500);
+				
+				error = e.toString();
+				
+				exist = false;
+				
+				System.out.println("2");
+				
+			} catch (Exception ex) {
+				
+				i = 20;
+				
+				error = ex.toString();
+				
+				exist = false;
+				
+				System.out.println("3");
+			}
+			
+		}
+		
+		if (error != null) {
+			System.out.println(error);
+		}
+		
+		return exist;
+		
+	}
+	
+ 	private static boolean elementExistClass(String element, int time) {
+		
+		boolean exist = false;
+		boolean run = true;
+		int i = 0;
+		String error = null;
+		
+		while (run && (time *2) >= i ) {
+			
+			try {
+				
+				chrome.getDriver().findElements(By.className(element));
 				
 				exist = true;
 				
